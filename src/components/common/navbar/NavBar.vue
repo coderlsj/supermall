@@ -23,6 +23,7 @@ export default {
 
 .center{
   flex: 1;
+  font-size: 16px;
 }
 
 .left, .right{

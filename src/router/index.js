@@ -5,6 +5,7 @@ const Home = () => import('../views/Home/Home');
 const Category = () => import('../views/category/Category');
 const Shopcar = () => import('../views/shopcar/Shopcar');
 const Profile = () => import('../views/profile/Profile');
+const Detail = () => import('../views/detail/Detail');
 
 
 // 1.使用插件
@@ -32,6 +33,10 @@ const routes = [
   {
     path: '/profile',
     component: Profile,
+  },
+  {
+    path: '/detail/:iid',
+    component: Detail
   }
 ]
 
