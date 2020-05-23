@@ -5,9 +5,11 @@
     </nav-bar>
     <tab-control class="tab-control" @tabClick="tabClick" :titles='["流行", "新款", "精选"]' ref="tabControl1" v-show="isFixed"></tab-control>
     <scroller ref="scroll" class="contain" :probe-type="3" @scroll="contentScroll" :pull-up-load="true" @pullUp='loadMore' >
+      <div>
       <home-swiper @swiperImageLoad="swiperImageLoad" :banners="banners"/>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature-view></feature-view>
+      </div>
       <tab-control class="" @tabClick="tabClick" :titles='["流行", "新款", "精选"]' ref="tabControl2"></tab-control>
       <goods-list :goods="showGoods" ></goods-list>
     </scroller>
@@ -29,7 +31,7 @@ import {getHomeMultidata} from 'network/home.js'
 import {getHomeGoods} from 'network/home.js'
 
 import {debounce} from 'common/utils.js'
-import {itemListListener, backTopMinxin} from 'common/mixin.js'
+import {itemListListener, backTopMinxin, tabControlMinxin} from 'common/mixin.js'
 
 
 export default {
@@ -43,7 +45,6 @@ export default {
         new: {page: 0, list: []},
         sell: {page: 0, list: []},
       },
-      currentType: 'pop',
       tabOffsetTop: 0,
       isFixed: false,
       saveY: 0, 
@@ -75,7 +76,7 @@ export default {
     //1.图片加载完的事件监听
    
   },
-  mixins: [itemListListener, backTopMinxin]
+  mixins: [itemListListener, backTopMinxin, tabControlMinxin]
 ,  activated() {
     console.log(this.saveY)
     this.$refs.scroll.scrollTo(0, this.saveY, 0)
@@ -96,22 +97,7 @@ export default {
      * 事件监听的方法
      */
     
-    tabClick(index) {
-      switch (index) {
-        case 0: 
-          this.currentType = 'pop'
-          break
-        case 1: 
-          this.currentType = 'new'
-          console.log(index);
-          break
-        case 2: 
-          this.currentType = 'sell'
-          break
-      }
-      this.$refs.tabControl2.currentIndex = index;
-      this.$refs.tabControl1.currentIndex = index;
-    },
+    
     swiperImageLoad() {
       //获取tabContrl的offsetTop(组件没有offsetTop属性)
       //所有组件都有一个属性$el:用于获取组件元素
@@ -141,7 +127,7 @@ export default {
       this.isShow = (-position.y > 1000)
 
       //2.决定吸顶属性
-      this.isFixed = (-position.y > this.tabOffsetTop)
+      this.isFixed = (-position.y > (this.tabOffsetTop))
     },
     loadMore() {
       this.getHomeGoods(this.currentType)
@@ -171,22 +157,20 @@ export default {
   position: relative;
   z-index: 9;
 }
-.center {
-  font-size: 16px;
-}
 
 
-.contain{
+
+/* .contain{
   overflow: hidden;
   top: 44px;
   bottom: 49px;
   left: 0;
   right: 0;
   position:absolute;
-}
-/* .contain{
-  margin-top: 44px;
+} */
+.contain{
+  /* margin-top: 44px; */
   height: calc(100% - 93px);
   overflow: hidden;
-} */
+}
 </style>
